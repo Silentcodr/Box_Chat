@@ -1,0 +1,17 @@
+{
+    "name": "box-chat-root",
+    "version": "1.0.0",
+    "description": "Root of Box Chat Application",
+    "scripts": {
+        "install:all": "npm install && cd backend && npm install && cd ../host && npm install && cd ../chat-mfe && npm install && cd ../presence-mfe && npm install && cd ../notification-mfe && npm install",
+        "start": "concurrently \"npm run start:backend\" \"npm run start:host\" \"npm run start:chat\" \"npm run start:presence\" \"npm run start:notification\"",
+        "start:backend": "cd backend && npm start",
+        "start:host": "cd host && npm start",
+        "start:chat": "cd chat-mfe && npm start",
+        "start:presence": "cd presence-mfe && npm start",
+        "start:notification": "cd notification-mfe && npm start"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

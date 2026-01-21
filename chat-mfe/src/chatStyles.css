@@ -1,0 +1,466 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-primary: #313338;
+    --bg-secondary: #2B2D31;
+    --bg-tertiary: #1E1F22;
+    /* Chat Input BG */
+    --text-primary: #F2F3F5;
+    --text-secondary: #B5BAC1;
+    --accent-color: #5865F2;
+    --accent-hover: #4752C4;
+    --message-hover: #2E3035;
+    --border-color: #26272D;
+    --divider: #1E1F22;
+    --danger: #DA373C;
+    --scrollbar-track: #2B2D31;
+    --scrollbar-thumb: #1A1B1E;
+}
+
+.chat-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+
+.chat-sidebar {
+    width: 240px;
+    background-color: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 0 rgba(4, 4, 5, 0.2);
+    z-index: 10;
+}
+
+.sidebar-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.add-room-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.1s;
+}
+
+.add-room-btn:hover {
+    color: var(--text-primary);
+}
+
+.room-list {
+    list-style: none;
+    padding: 8px;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.room-item {
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    transition: all 0.1s ease-out;
+}
+
+.room-item span:first-child::before {
+    content: "#";
+    margin-right: 6px;
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.room-item:hover {
+    background-color: var(--message-hover);
+    color: var(--text-primary);
+}
+
+.room-item.active {
+    background-color: #404249;
+    color: var(--text-primary);
+}
+
+.lock-icon {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.messages-area {
+    flex: 1;
+    padding: 16px 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    /* Removing gap, using margin on messages */
+}
+
+.message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    /* Changed from flex-end */
+    width: 100%;
+    /* Full width for hover effect */
+    padding: 6px 16px;
+    margin-top: 0;
+    transition: background-color 0.1s;
+}
+
+.message-wrapper:hover {
+    background-color: #2E3035;
+    /* Subtle highlight on hover */
+}
+
+.message-wrapper.me {
+    flex-direction: row;
+    /* Keep consistency, don't reverse anymore */
+}
+
+/* For "Me" messages, we might want a slight background or just same style */
+/* Modern chat apps often don't distinguish alignment, just content is enough.
+   But to keep it familiar for this user, let's keep alignment distinction or 
+   move to a purely modern "slack" style where everything is left-aligned.
+   Let's go with "Slack/Discord style": everything Left Aligned. */
+
+.message-wrapper.me {
+    align-self: flex-start;
+    /* Reset */
+    flex-direction: row;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    width: 100%;
+}
+
+.message-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.sender-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.sender-name:hover {
+    text-decoration: underline;
+}
+
+.timestamp {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.message-bubble {
+    /* No bubble background for default "Discord" style, just text. 
+       But user asked for "professional like regular chat app". 
+       Let's stick to bubbles but cleaner. */
+    position: relative;
+    color: var(--text-primary);
+    /* Default text color */
+    font-size: 1rem;
+    line-height: 1.375rem;
+    font-weight: 400;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    /* Optional: revert to bubble style if requested. 
+       Let's use a subtle background for everyone to differentiate message block. */
+}
+
+/* Differentiate "Me" messages slightly in the modern style? 
+   Actually, let's stick to the Classic "Whatsapp/Messenger" bubbles but upgraded
+   OR the "Discord/Slack" layout. 
+   Given "professional like regular chat application", often implies Slack/Teams. 
+   Slack/Teams/Discord = Left aligned, no bubbles usually (except Teams). 
+   Let's go with Left Aligned + Avatar. */
+
+/* We need Avatars in chat for this look. 
+   The current DOM structure might not have avatars in message-wrapper easily. 
+   I will inject a placeholder avatar in CSS or rely on existing structure.
+   Refactoring CSS to assume we might not change HTML structure too much yet, 
+   but 'message-wrapper' has 'message-content'. */
+
+/* Let's try to simulate bubbles but nice ones. */
+.message-wrapper.me {
+    justify-content: flex-end;
+}
+
+.message-wrapper.them {
+    justify-content: flex-start;
+}
+
+.message-wrapper.me .message-content {
+    align-items: flex-end;
+}
+
+.message-wrapper.them .message-content {
+    align-items: flex-start;
+}
+
+.message-bubble {
+    padding: 10px 14px;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.message-bubble.blue {
+    background-color: var(--accent-color);
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message-bubble.gray {
+    background-color: #383A40;
+    /* Darker gray */
+    color: var(--text-primary);
+    border-bottom-left-radius: 2px;
+}
+
+.input-area {
+    padding: 0 16px 24px 16px;
+    /* modern apps have padding bottom */
+    background-color: var(--bg-primary);
+    /* Transparent/same as bg */
+    border-top: none;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+    flex: 1;
+    background-color: var(--bg-tertiary);
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    padding: 0;
+}
+
+.send-btn {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.1s;
+    padding: 0;
+}
+
+.send-btn:hover {
+    color: var(--accent-color);
+    background-color: transparent;
+    transform: none;
+}
+
+.send-btn.active {
+    /* If input has text? */
+    color: var(--accent-color);
+}
+
+
+/* Create Room Modal - Professional Look */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #313338;
+    padding: 24px;
+    border-radius: 4px;
+    width: 440px;
+    max-width: 95%;
+    border: none;
+    color: var(--text-primary);
+    box-shadow: 0 0 0 1px rgba(4, 4, 5, 0.15), 0 8px 16px rgba(0, 0, 0, 0.24);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    border: none;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #1E1F22;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    height: 40px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.checkbox-group input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-size: 0.9rem;
+    text-transform: none;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.modal-actions {
+    background-color: #2B2D31;
+    margin: 24px -24px -24px -24px;
+    padding: 16px 24px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 2px 16px;
+    height: 38px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    text-decoration: underline;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    border: none;
+    color: white;
+    padding: 2px 24px;
+    height: 38px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
